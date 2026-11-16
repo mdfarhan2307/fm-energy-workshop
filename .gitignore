@@ -1,0 +1,25 @@
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment variables
+.env
+
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Scratch output and helper files
+*_out.txt
+*_err.txt
+*.bat
+git_status.txt
+status2_out.txt
+unstage_out.txt
+stage2_out.txt
+rm_out.txt
+rm_err.txt
