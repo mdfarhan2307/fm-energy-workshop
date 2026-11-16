@@ -23,3 +23,13 @@ unstage_out.txt
 stage2_out.txt
 rm_out.txt
 rm_err.txt
+
+# Dashboard scratch and smoke-test files
+dashboard/smoke_*.py
+dashboard/check_*.py
+dashboard/range_check.py
+dashboard/pkg_check*.py
+dashboard/run_dashboard.bat
+dashboard/*_out.txt
+dashboard/*_err.txt
+dashboard/pip_*.txt
