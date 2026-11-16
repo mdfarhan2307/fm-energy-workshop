@@ -96,6 +96,10 @@ def _load_env(path: str) -> dict:
 
 @st.cache_resource(show_spinner=False)
 def _env() -> dict:
+    # On Streamlit Cloud, secrets are injected via st.secrets.
+    # Locally, fall back to reading the .env file.
+    if "DATABASE_URL" in st.secrets:
+        return {k: st.secrets[k] for k in st.secrets}
     return _load_env(os.path.join(_ROOT, ".env"))
 
 # ── Neon helpers ──────────────────────────────────────────────────────────────

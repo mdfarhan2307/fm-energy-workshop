@@ -85,8 +85,13 @@ def _load_env(path: str) -> dict:
 
 
 def _connection() -> tuple[str, dict]:
-    env = _load_env(os.path.join(_ROOT, ".env"))
-    conn = re.sub(r"[&?]channel_binding=require", "", env["DATABASE_URL"])
+    # On Streamlit Cloud use st.secrets; locally fall back to .env
+    if "DATABASE_URL" in st.secrets:
+        conn = st.secrets["DATABASE_URL"]
+    else:
+        env = _load_env(os.path.join(_ROOT, ".env"))
+        conn = env["DATABASE_URL"]
+    conn = re.sub(r"[&?]channel_binding=require", "", conn)
     m = re.match(r"postgresql://[^@]+@([^/?]+)", conn)
     if not m:
         raise ValueError("Cannot parse host from DATABASE_URL")

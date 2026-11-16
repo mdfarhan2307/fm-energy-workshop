@@ -59,9 +59,14 @@ def _load_env(path: str) -> dict:
 
 def _connection() -> tuple[str, dict]:
     """Return (sql_url, headers) for the Neon HTTP SQL API."""
-    env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".env"))
-    env = _load_env(env_path)
-    conn = re.sub(r"[&?]channel_binding=require", "", env["DATABASE_URL"])
+    # On Streamlit Cloud use st.secrets; locally fall back to .env
+    if "DATABASE_URL" in st.secrets:
+        conn = st.secrets["DATABASE_URL"]
+    else:
+        env_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".env"))
+        env = _load_env(env_path)
+        conn = env["DATABASE_URL"]
+    conn = re.sub(r"[&?]channel_binding=require", "", conn)
     m = re.match(r"postgresql://[^@]+@([^/?]+)", conn)
     if not m:
         raise ValueError("Cannot parse host from DATABASE_URL")

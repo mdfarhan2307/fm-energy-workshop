@@ -42,9 +42,13 @@ def load_env(path: str) -> dict:
 
 
 def get_connection_string() -> str:
-    env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
-    env = load_env(os.path.abspath(env_path))
-    url = env.get("DATABASE_URL", "")
+    # On Streamlit Cloud use st.secrets; locally fall back to .env
+    if "DATABASE_URL" in st.secrets:
+        url = st.secrets["DATABASE_URL"]
+    else:
+        env_path = os.path.join(os.path.dirname(__file__), "..", ".env")
+        env = load_env(os.path.abspath(env_path))
+        url = env.get("DATABASE_URL", "")
     # Strip channel_binding=require — not supported by the HTTP API
     url = re.sub(r"[&?]channel_binding=require", "", url)
     return url
